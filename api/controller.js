@@ -2,6 +2,8 @@ const jwt = require('jsonwebtoken');
 const catchasync=require('./catchasync')
 const User=require('./model')
 const AppError=require('./apperror')
+const Email=require('./email')
+const crypto=require('crypto')
 
 const signtoken = (id) => {
   return jwt.sign({ id }, 'secrettoken', {
@@ -34,7 +36,7 @@ exports.signup=catchasync(async (req,res,next)=>{
         password:req.body.password,
         passwordconfirm:req.body.passwordconfirm
     })
-
+  //  await new Email(newUser).welcome()
     createtoken(newUser,201,req,res)
 })
 
@@ -59,3 +61,34 @@ exports.logout=(req,res)=>{
     })
     res.status(200).json({status:'success'})
 }
+
+
+exports.forgotpassword=catchasync(async (req,res,next)=>{
+  const user=await User.findOne({email:req.body.email})
+  // console.log(user)
+  if (!user){
+    return next(new AppError('there is no user with given email'))
+
+  }
+  const token=user.createtoken()
+  await user.save({validateBeforeSave:false})
+
+  await new Email(user,`http://localhost:5000/resetpassword/${token}`).token()
+  res.status(200).json({
+    token
+  })
+})
+
+exports.resetpassword=catchasync(async (req,res,next)=>{
+  const hashedtoken=crypto.createHash('sha256').update(req.params.token).digest('hex')
+  const user=await User.findOne({passwordresettoken:hashedtoken})
+  if(!user){
+    return next(new AppError('token is invalid'))
+    
+  }
+  user.password=req.body.password;
+  user.passwordconfirm=req.body.passwordconfirm;
+  user.passwordresettoken=undefined;
+  await user.save()
+  createtoken(user,200,req,res)
+})
