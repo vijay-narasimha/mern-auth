@@ -41,6 +41,7 @@ exports.signup=catchasync(async (req,res,next)=>{
 })
 
 exports.login=catchasync(async (req,res,next)=>{
+  console.log(req.body)
     const {email,password}=req.body;
     if(!email){
         return next(new AppError('please provide email'),400)
