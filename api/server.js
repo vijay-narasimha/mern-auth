@@ -7,7 +7,10 @@ const cors=require('cors')
 
 const app = express();
 const port = 5000;
-app.use(cors())
+app.use(cors({
+  credentials:true,
+  origin:'http://localhost:3000'
+}))
 
 app.use(express.urlencoded({extended:false}))
 app.use(express.json())

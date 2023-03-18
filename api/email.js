@@ -1,7 +1,7 @@
 const nodemailer=require('nodemailer')
 const ejs=require('ejs')
 const {convert}=require('html-to-text')
-
+const path=require('path')
 
 module.exports=class Email{
     constructor(user,url){
@@ -12,13 +12,7 @@ module.exports=class Email{
     }
     newTransport(){
         return nodemailer.createTransport({
-            // host:'smtp.ethereal.email',
-            // port:587,
-            // auth:{
-            //     user:"liza9@ethereal.email",
-            //     pass:"zzNDam9qe3DfyGwU8K",
-    
-            // }
+           
             service:'gmail',
             auth:{
                 user:'narasimha.vijay2001@gmail.com',
@@ -27,8 +21,10 @@ module.exports=class Email{
         })
     }
     async send(subject){
-        // const html=ejs.renderFile('./mail.ejs')
-        const html=`<h1>${this.url}</h1>`
+        const html=(await ejs.renderFile('./views/mail.ejs')).toString()
+        
+        // const html=`<h1>${this.url}</h1>`
+        // const html='<h1>helloworld</h1>'
         const mailOptions={
             from:this.from,
             to:this.to,
