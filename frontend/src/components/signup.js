@@ -14,13 +14,15 @@ export default function Signup() {
     e.preventDefault();
     try {
       setErr('');
-      const user = await axios.post('http://localhost:5000/api/signup', {
+      
+      const user = await axios.post('http://127.0.0.1:5000/api/signup', {
         email: emailRef.current.value,
         password: passwordRef.current.value,
         name:nameRef.current.value,
         passwordconfirm:passwordconfirmRef.current.value
       });
-      localStorage.setItem('user',JSON.stringify(user))
+      
+      
     } catch (err) {
         console.log(err)
       setErr(err.response.data.message);

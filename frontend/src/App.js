@@ -1,25 +1,17 @@
 import React from 'react'
-import {createBrowserRouter,RouterProvider} from 'react-router-dom'
-import Login from './components/Login'
-import Signup from './components/signup'
-import Dashboard from './components/dashboard'
-import PrivateRoute from './privateroute'
-export default function App() {
-const router=createBrowserRouter([
-  {
-    path:'/',
-    element: <PrivateRoute><Dashboard/></PrivateRoute>
-  },{
-    path:'/login',
-    element:<Login/>
-  },{
-    path:'signup',
-    element:<Signup/>
-  }
-])
+import Router from './Router';
+import axios from 'axios';
+import { UserContextProvider } from './UserContext';
+export default function Routes() {
+    
+      axios.defaults.baseURL='http://localhost:5000'
+      axios.defaults.withCredentials=true
 
 
   return (
-    <RouterProvider router={router}/>
+    <UserContextProvider>
+<Router/>
+    </UserContextProvider>
+   
   )
 }

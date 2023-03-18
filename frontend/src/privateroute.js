@@ -1,10 +1,26 @@
-import React,{useState} from 'react'
+import React,{useContext} from 'react'
 import {Navigate} from 'react-router-dom'
+import { UserContext } from './UserContext'
 
 export default function PrivateRoute({children}){
 
-    const [user,setUser]=useState(JSON.parse(localStorage.getItem('user')))
-if (!user) return <Navigate to='/login'></Navigate>
+let {username}=useContext(UserContext)
 
-    return children
+console.log(username,'name')
+
+
+return (
+    
+    <>
+     {
+    username ? children : <Navigate to='/login'></Navigate>
+}
+    </>
+    
+   
+
+
+)
+
+
 }
