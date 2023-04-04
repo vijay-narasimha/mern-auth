@@ -7,7 +7,7 @@ const crypto=require('crypto')
 
 const signtoken = (id,name) => {
   return jwt.sign({ id,name }, 'secrettoken', {
-    expiresIn: '90d',
+    expiresIn: '1m',
   });
 };
 
@@ -17,7 +17,8 @@ const createtoken = (user, statuscode, req, res) => {
   const cookieoptions = {
     samesite:'none',
     secure:true,
-    expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
+    httpOnly:true,
+    expires: new Date(Date.now() +  60*1* 1000),
   };
   console.log('token sent')
   res.cookie('jwt', token, cookieoptions).status(statuscode).json({
@@ -44,7 +45,7 @@ exports.signup=catchasync(async (req,res,next)=>{
 })
 
 exports.login=catchasync(async (req,res,next)=>{
-  console.log(req.body)
+  // console.log(req.body)
     const {email,password}=req.body;
     if(!email){
         return next(new AppError('please provide email'),400)
@@ -56,14 +57,14 @@ exports.login=catchasync(async (req,res,next)=>{
     if (!user || !(await user.checkpassword(password,user.password))){
         return next(new AppError('incorrect email or password'),401)
     }
-   await new Email(user).welcome()
+  //  await new Email(user).welcome()
 
     createtoken(user,200,req,res)
 })
 
 exports.logout=(req,res)=>{
     res.cookie('jwt','logout',{
-        expires:new Date(Date.now()+10*1000)
+        expires:new Date(Date.now()+1000)
     }).status(200).json({status:'success'})
 }
 

@@ -4,8 +4,8 @@ import axios from 'axios';
 export const UserContext = createContext();
 
 export function UserContextProvider({ children }) {
-  const [username, setUsername] = useState(undefined);
-  const [id, setId] = useState(undefined);
+  const [username, setUsername] = useState('');
+  const [id, setId] = useState("");
 
   async function profile() {
     await axios.get('/api/profile').then((response) => {
@@ -19,7 +19,7 @@ export function UserContextProvider({ children }) {
   
   }, []);
 
-console.log(username,'context')
+
 
   return (
     <>

@@ -16,12 +16,13 @@ export default function Login() {
     e.preventDefault();
     try {
       setErr('');
-      await axios.post('http://localhost:5000/api/login', {
+      const res=await axios.post('http://localhost:5000/api/login', {
         email: emailRef.current.value,
         password: passwordRef.current.value,
       });
       console.log('login successful');
-      navigate('/');
+      window.location.reload(navigate('/'))
+      localStorage.setItem('token',JSON.stringify(res.data.token))
       
     } catch (err) {
       

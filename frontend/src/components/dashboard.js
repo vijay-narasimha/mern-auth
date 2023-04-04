@@ -7,7 +7,7 @@ import { UserContext } from '../UserContext';
 
 import axios from 'axios';
 import { Link ,useNavigate} from 'react-router-dom';
-
+import decode from 'jwt-decode'
 
 
 export default function Dashboard() {
@@ -21,11 +21,11 @@ export default function Dashboard() {
 
   const { username } = useContext(UserContext);
   
-
   return (
     <Centered>
       <Card>
-        <Card.Body>
+        <Card.Body> 
+        
           {username ?<>
             <div>{username}</div>
           <Button onClick={handlelogout}>logout</Button> 
